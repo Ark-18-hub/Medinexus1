@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Registration Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2, h3 { text-align: center; color: #333; margin-bottom: 20px; }
+    label { font-weight: bold; display: block; margin-top: 12px; color: #444; }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; }
+    .form-section {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: #f9fbfd;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
+    .dept-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .dept-table th, .dept-table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    .dept-table th { background: #e9ecef; }
+    .add-dept-btn {
+      margin-top: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .add-dept-btn:hover { background: #0056b3; }
+    .submit-btn {
+      display: block;
+      margin: 20px auto 0;
+      width: 40%;
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .submit-btn:hover { background: #1f7a34; }
+    .show-password { margin: 8px 0; }
+    .show-password label {
+      display:inline-flex;
+      align-items:center;
+      gap: 5px;
+      font-weight:normal;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Hospital Registration Form</h2>
+
+    <!-- BASIC INFO -->
+    <div class="form-section">
+      <h3>Basic Information</h3>
+      <label for="hospitalName">Hospital Name</label>
+      <input type="text" id="hospitalName" placeholder="Enter Hospital Name" required>
+
+      <label for="hospitalType">Hospital Type</label>
+      <select id="hospitalType" required>
+        <option value="">Select Hospital Type</option>
+        <option value="government">Government</option>
+        <option value="private">Private</option>
+        <option value="trust">Trust</option>
+        <option value="ngo">NGO</option>
+      </select>
+
+      <input type="text" id="license" placeholder="Enter License or Registration Number">
+      <input type="number" id="estYear" placeholder="e.g., 1995" min="1800" max="2100">
+      <input type="email" id="hospitalEmail" placeholder="hospital@example.com">
+      <input type="text" id="username" placeholder="Choose a username" required>
+      <input type="password" id="password" placeholder="Enter Password">
+      <input type="password" id="confirm-password" placeholder="Re-enter Password">
+
+      <div class="show-password">
+        <label>
+          <input type="checkbox" onclick="togglePassword()"> Show Password
+        </label>
+      </div>
+    </div>
+
+    <!-- LOCATION -->
+    <div class="form-section">
+      <h3>Location & Contact</h3>
+      <textarea id="address" rows="3" placeholder="Street address, building, etc."></textarea>
+      <input type="text" id="city" placeholder="Enter City">
+      <input type="text" id="state" placeholder="Enter State">
+      <input type="number" id="pin" placeholder="Enter PIN Code">
+      <input type="tel" id="phone" placeholder="e.g., +91 99999999">
+      <input type="url" id="website" placeholder="https://www.example.com">
+
+      <!-- New fields for longitude & latitude -->
+      <input type="number" step="0.0000001" id="longitude" placeholder="Enter Longitude">
+      <input type="number" step="0.0000001" id="latitude" placeholder="Enter Latitude">
+    </div>
+
+    <!-- CAPACITY -->
+    <div class="form-section">
+      <h3>Capacity & Infrastructure</h3>
+      <input type="number" id="totalBeds" placeholder="Enter total beds" min="0">
+      <input type="number" id="icuBeds" placeholder="Number of ICU beds" min="0">
+      <input type="number" id="ventilators" placeholder="Number of ventilators" min="0">
+      <input type="number" id="ambulance" placeholder="Number of ambulances" min="0">
+      <input type="number" id="doctors" placeholder="Total doctors available" min="0">
+      <input type="number" id="nurses" placeholder="Total nurses available" min="0">
+    </div>
+
+    <!-- DEPARTMENTS -->
+    <div class="form-section">
+      <h3>Departments & Specialties</h3>
+      <table class="dept-table" id="deptTable">
+        <thead>
+          <tr>
+            <th>Department Name</th>
+            <th>Specialist Available</th>
+            <th>Beds Available</th>
+            <th>24x7 Service</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="text" name="departmentName[]" placeholder="e.g., Cardiology"></td>
+            <td><input type="text" name="specialist[]" placeholder="e.g., Heart Specialist"></td>
+            <td><input type="number" name="bedsAvailable[]" placeholder="e.g., 20" min="0"></td>
+            <td>
+              <select name="service247[]">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </td>
+            <td><button type="button" onclick="removeRow(this)">Remove</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="add-dept-btn" onclick="addDeptRow()">Add Department</button>
+    </div>
+
+    <!-- SUBMIT -->
+    <button type="button" class="submit-btn" onclick="submitRegistration()">Submit Registration</button>
+  </div>
+
+<script>
+function togglePassword() {
+  const pw = document.getElementById('password');
+  const cpw = document.getElementById('confirm-password');
+  if (pw.type === 'password') {
+    pw.type = 'text'; cpw.type = 'text';
+  } else {
+    pw.type = 'password'; cpw.type = 'password';
+  }
+}
+
+function addDeptRow() {
+  const table = document.querySelector('#deptTable tbody');
+  const newRow = table.rows[0].cloneNode(true);
+  newRow.querySelectorAll('input').forEach(i => i.value = '');
+  table.appendChild(newRow);
+}
+
+function removeRow(btn) {
+  const row = btn.closest('tr');
+  const table = document.querySelector('#deptTable tbody');
+  if (table.rows.length > 1) table.removeChild(row);
+  else alert('At least one department is required.');
+}
+
+function collectDepartments() {
+  const rows = document.querySelectorAll('#deptTable tbody tr');
+  return Array.from(rows).map(row => ({
+    departmentName: row.querySelector('[name="departmentName[]"]').value,
+    specialist:     row.querySelector('[name="specialist[]"]').value,
+    bedsAvailable:  row.querySelector('[name="bedsAvailable[]"]').value,
+    service247:     row.querySelector('[name="service247[]"]').value
+  }));
+}
+
+async function submitRegistration() {
+  const formData = {
+    hospitalName: document.getElementById('hospitalName').value,
+    hospitalType: document.getElementById('hospitalType').value,
+    license:      document.getElementById('license').value,
+    estYear:      document.getElementById('estYear').value,
+    hospitalEmail:document.getElementById('hospitalEmail').value,
+    username:     document.getElementById('username').value,
+    password:     document.getElementById('password').value,
+    address:      document.getElementById('address').value,
+    city:         document.getElementById('city').value,
+    state:        document.getElementById('state').value,
+    pin:          document.getElementById('pin').value,
+    phone:        document.getElementById('phone').value,
+    website:      document.getElementById('website').value,
+    longitude:    document.getElementById('longitude').value,
+    latitude:     document.getElementById('latitude').value,
+    totalBeds:    document.getElementById('totalBeds').value,
+    icuBeds:      document.getElementById('icuBeds').value,
+    ventilators:  document.getElementById('ventilators').value,
+    ambulances:   document.getElementById('ambulance').value,
+    doctors:      document.getElementById('doctors').value,
+    nurses:       document.getElementById('nurses').value,
+    departments:  collectDepartments()
+  };
+
+  try {
+    const res = await fetch('/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    const data = await res.json();
+    alert(data.message || 'Registered!');
+  } catch (err) {
+    alert('Error submitting form');
+    console.error(err);
+  }
+}
+</script>
+</body>
+</html>
